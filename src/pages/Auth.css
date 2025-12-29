@@ -1,0 +1,119 @@
+/* src/pages/Auth.css */
+
+/* Contenedor principal: Centra todo en la pantalla */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa toda la altura */
+  background-color: #003b4c; /* Fondo azul oscuro estilo bestcycling */
+  font-family: "Montserrat", sans-serif;
+  padding: 20px;
+}
+
+/* La tarjeta del formulario */
+.auth-card {
+  background-color: #1a2a35; /* Azul oscuro elevado */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Sombra elegante */
+  width: 100%;
+  max-width: 400px; /* Que no sea muy ancho */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.auth-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Estilos de los inputs (Campos de texto) */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  color: #ccc;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: #0a1f2e;
+  color: white;
+  font-size: 1rem;
+  outline: none; /* Saca el borde azul feo por defecto */
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Para que el padding no rompa el ancho */
+}
+
+/* Efecto al hacer clic en el input */
+.form-input:focus {
+  border-color: #ff6600; /* Borde naranja */
+  background-color: #1a2a35;
+}
+
+/* Botón (Copiado del estilo de Home para consistencia) */
+.auth-button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: #ff6600;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.auth-button:hover {
+  background-color: #e65c00;
+  transform: translateY(-2px);
+}
+
+.auth-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mensajes de error */
+.auth-error {
+  color: #ff6b6b;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+/* Link para cambiar entre Login/Registro */
+.auth-link {
+  display: block;
+  margin-top: 20px;
+  color: #888;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.auth-link:hover {
+  color: #ff6600;
+  text-decoration: underline;
+}

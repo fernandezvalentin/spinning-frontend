@@ -1,0 +1,26 @@
+/* src/index.css */
+
+/* ESTO ES FUNDAMENTAL: Resetea todos los márgenes y paddings por defecto del navegador */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Aseguramos que el cuerpo y la raíz ocupen todo el ancho sin márgenes */
+html,
+body,
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #003b4c; /* Fondo azul oscuro estilo bestcycling */
+  overflow-x: hidden; /* Evita scroll horizontal innecesario */
+}
+
+/* ... el resto de tu CSS (fuentes, etc.) ... */
+body {
+  font-family: "Montserrat", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

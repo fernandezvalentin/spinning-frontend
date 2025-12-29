@@ -1,0 +1,47 @@
+:root {
+  --bg-primary: #003b4c;
+  --bg-elevated: #0a1f2e;
+  --card: #1a2a35;
+  --card-contrast: #f6f8ff;
+  --text-main: #ffffff;
+  --text-muted: #b8c5d0;
+  --accent: #ff6600;
+  --accent-strong: #e65c00;
+  --accent-warm: #ff7b50;
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at 10% 20%, #0a1f2e 0%, #003b4c 45%),
+    radial-gradient(circle at 80% 0%, #0f294d 0%, #003b4c 40%),
+    #003b4c;
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+}
+
+section {
+  width: 100%;
+}
+
