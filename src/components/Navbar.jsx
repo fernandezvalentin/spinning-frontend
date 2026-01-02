@@ -1,82 +1,56 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import "./Navbar.css"; // <-- Importamos el CSS nuevo
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Navbar.css";
 
 function Navbar() {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
   };
 
   return (
     <nav className="navbar">
       {/* 1. LOGO */}
-      <Link to="/" className="nav-logo">
+      <Link to="/" className="nav-logo" onClick={closeMenu}>
         SPINNING
       </Link>
 
+      {/* HAMBURGER TOGGLE */}
+      <button className={`nav-toggle ${isOpen ? "open" : ""}`} onClick={toggleMenu}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       {/* 2. ENLACES */}
-      <div className="nav-links">
-        {user ? (
-          // --- USUARIO LOGUEADO ---
-          <>
-            <Link to="/clases" className="nav-link">
-              CLASES
-            </Link>
+      <div className={`nav-links ${isOpen ? "open" : ""}`}>
+        <a href="/#clases" className="nav-link" onClick={closeMenu}>
+          CLASES
+        </a>
+        <a href="/#personalizadas" className="nav-link" onClick={closeMenu}>
+          PERSONALIZADAS
+        </a>
+        <a href="/#quien-soy" className="nav-link" onClick={closeMenu}>
+          QUIÉN SOY
+        </a>
+        <a href="/#contacto" className="nav-link" onClick={closeMenu}>
+          CONTACTO
+        </a>
 
-            {user.isAdmin && (
-              <Link to="/admin" className="nav-link">
-                ADMIN
-                <span className="admin-badge">PRO</span>
-              </Link>
-            )}
-
-            <span
-              className="nav-link nav-user-info"
-              style={{ cursor: "default", color: "#888" }}
-            >
-              Hola, {user.email.split("@")[0]}
-            </span>
-
-            <button onClick={handleLogout} className="nav-btn logout-btn">
-              Salir
-            </button>
-          </>
-        ) : (
-          // --- VISITANTE ---
-          <>
-            <a href="/#clases" className="nav-link">
-              CLASES
-            </a>
-            <a href="/#personalizadas" className="nav-link">
-              PERSONALIZADAS
-            </a>
-            <a href="/#quien-soy" className="nav-link">
-              QUIÉN SOY
-            </a>
-
-            <div
-              style={{
-                width: "1px",
-                height: "20px",
-                background: "#444",
-                display: "inline-block",
-              }}
-            ></div>
-
-            <Link to="/login" className="nav-link">
-              INGRESAR
-            </Link>
-
-            <Link to="/register" className="nav-btn">
-              EMPEZAR
-            </Link>
-          </>
-        )}
+        <a 
+          href="https://sitiodeentrenamiento.fiit.la/" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="nav-btn"
+          onClick={closeMenu}
+        >
+          EMPEZÁ HOY
+        </a>
       </div>
     </nav>
   );

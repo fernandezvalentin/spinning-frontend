@@ -1,7 +1,4 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { crearLinkDePago } from "../services/api";
+import React from "react";
 import "./Home.css";
 
 const HeroSection = () => (
@@ -10,7 +7,7 @@ const HeroSection = () => (
       <div>
         <span className="eyebrow">Clases de Spinning Online</span>
         <h1 className="hero-title">
-          Energía Bestcycling con enfoque en tu progreso
+          Energía, música y enfoque en tu progreso
         </h1>
         <p className="hero-subtitle">
           Entrena en casa con sesiones diseñadas para sentir la potencia de una
@@ -18,10 +15,7 @@ const HeroSection = () => (
           siguen tu ritmo.
         </p>
         <div className="hero-actions">
-          <Link to="/register" className="btn-primary">
-            Empezar ahora
-          </Link>
-          <a href="#clases" className="btn-secondary">
+          <a href="#clases" className="btn-primary">
             Ver clases disponibles
           </a>
         </div>
@@ -119,9 +113,6 @@ const CustomClassesSection = () => (
             curadas, tempos sugeridos y feedback directo.
           </p>
         </div>
-        <Link to="/register" className="btn-primary">
-          Reservar mi plan
-        </Link>
       </div>
 
       <div className="cards-grid">
@@ -175,7 +166,7 @@ const WhoAmISection = () => (
       <div className="section-header">
         <div>
           <span className="eyebrow">Quién soy</span>
-          <h2 className="section-title">Tu coach en la bici</h2>
+          <h2 className="section-title">Tu coach en casa</h2>
           <p className="section-subtitle">
             Instructor de indoor cycling con años de sala y cientos de clases
             online impartidas. Me enfoco en que cada sesión tenga propósito.
@@ -186,12 +177,12 @@ const WhoAmISection = () => (
       <div className="profile">
         <div className="profile-photo">
           <img
-            src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?q=80&w=1200&auto=format&fit=crop"
+            src="https://www.dir.cat/blog/wp-content/uploads/2022/12/gettyimages-820404152-170667a.jpg"
             alt="Instructor en bici"
           />
         </div>
         <div className="profile-content">
-          <h3>¡Hola! Soy Marina</h3>
+          <h3>¡Hola! Soy Marina Beccaglia.</h3>
           <p>
             Creo sesiones que combinan música potente, bloques claros y
             progresión realista. Mi meta es que notes el avance semana a semana,
@@ -215,15 +206,12 @@ const CTASection = () => (
         <div>
           <h3 style={{ margin: "0 0 8px" }}>¿Listo para pedalear?</h3>
           <p className="cta-text">
-            Únete hoy y recibe un plan de inicio con tres clases guiadas y
+            Recibe un plan de inicio con tres clases guiadas y
             recomendaciones de resistencia para tu bici.
           </p>
         </div>
         <div className="cta-actions">
-          <Link to="/register" className="btn-primary">
-            Crear cuenta
-          </Link>
-          <a className="btn-secondary" href="#personalizadas">
+          <a className="btn-primary" href="#personalizadas">
             Pedir plan personalizado
           </a>
         </div>
@@ -232,103 +220,67 @@ const CTASection = () => (
   </section>
 );
 
-function Home() {
-  const { user } = useContext(AuthContext);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handlePagar = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const data = await crearLinkDePago(user.token);
-      window.location.href = data.url;
-    } catch (error) {
-      console.error("Error:", error);
-      setError(`Error: ${error.message}`);
-      setLoading(false);
-    }
-  };
-
-  const renderContent = () => {
-    if (!user) {
-      return (
-        <>
-          <HeroSection />
-          <ClassesSection />
-          <CustomClassesSection />
-          <WhoAmISection />
-          <CTASection />
-          <div className="footer">
-            <p>© 2025 Spinning App. Inspirado en la energía Bestcycling.</p>
-            <p>Entrena desde casa con música y coaching real.</p>
-          </div>
-        </>
-      );
-    }
-
-    if (user.isAdmin) {
-      return (
-        <div className="info-card" style={{ marginTop: "80px" }}>
-          <h2>👋 ¡Hola, Admin!</h2>
-          <p>Tienes el control total de la plataforma.</p>
-          <button
-            className="btn-primary"
-            onClick={() => navigate("/admin")}
-            style={{ marginTop: "20px" }}
-          >
-            Ir al Panel de Admin
-          </button>
+const ContactSection = () => (
+  <section className="section" id="contacto">
+    <div className="section-inner">
+      <div className="section-header" style={{ justifyContent: "center", textAlign: "center", marginBottom: "48px" }}>
+        <div>
+          <span className="eyebrow">Contacto</span>
+          <h2 className="section-title">¡Hablemos y empecemos a entrenar!</h2>
+          <p className="section-subtitle" style={{ margin: "16px auto" }}>
+            Sígueme en redes sociales o escríbeme directamente para consultas sobre planes personalizados y clases.
+          </p>
         </div>
-      );
-    }
-
-    if (user.pago_activo) {
-      return (
-        <div className="info-card" style={{ marginTop: "80px" }}>
-          <h2>🎉 ¡Suscripción Activa!</h2>
-          <p>Ya tienes acceso ilimitado a todas las clases.</p>
-          <div style={{ marginTop: "30px" }}>
-            <p>¿Listo para sudar?</p>
-            <button className="btn-primary" onClick={() => navigate("/clases")}>
-              Ir a Clases
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="info-card" style={{ marginTop: "80px" }}>
-        <h2>¡Último paso! 🚴</h2>
-        <p style={{ fontSize: "1.1rem", marginBottom: "20px" }}>
-          Tu cuenta está creada. Activa tu suscripción.
-        </p>
-        <p
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            marginBottom: "30px",
-          }}
-        >
-          USD 10.00{" "}
-          <span style={{ fontSize: "1rem", fontWeight: "normal" }}>/ mes</span>
-        </p>
-
-        <button
-          onClick={handlePagar}
-          disabled={loading}
-          className="btn-primary"
-        >
-          {loading ? "Procesando..." : "Pagar con Stripe"}
-        </button>
-        {error && <p className="error-msg">{error}</p>}
       </div>
-    );
-  };
 
-  return <div className="home-container">{renderContent()}</div>;
+      <div className="social-grid">
+        <a href="https://www.instagram.com/sitiodeentrenamiento.mb/?hl=es" target="_blank" rel="noopener noreferrer" className="social-card instagram">
+          <div className="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path>
+            </svg>
+          </div>
+          <h4>Instagram</h4>
+          <p>Mira mis rutinas y tips diarios</p>
+        </a>
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="social-card facebook">
+          <div className="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </div>
+          <h4>Facebook</h4>
+          <p>Únete a nuestra comunidad</p>
+        </a>
+        <a href="https://wa.me/5492342465540" target="_blank" rel="noopener noreferrer" className="social-card whatsapp">
+          <div className="social-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .018 5.396.015 12.03a11.811 11.811 0 001.592 5.96L0 24l6.12-1.605a11.782 11.782 0 005.925 1.587h.005c6.634 0 12.032-5.396 12.035-12.03a11.782 11.782 0 00-3.417-8.497z"></path>
+            </svg>
+          </div>
+          <h4>WhatsApp</h4>
+          <p>Consulta directa y rápida</p>
+        </a>
+      </div>
+    </div>
+  </section>
+);
+
+function Home() {
+  return (
+    <div className="home-container">
+      <HeroSection />
+      <ClassesSection />
+      <CustomClassesSection />
+      <WhoAmISection />
+      <ContactSection />
+      <CTASection />
+      <div className="footer">
+        <p>© 2025 Spinning App. Inspirado en la energía Bestcycling.</p>
+        <p>Entrena desde casa con música y coaching real.</p>
+      </div>
+    </div>
+  );
 }
 
 export default Home;
