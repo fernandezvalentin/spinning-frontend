@@ -47,7 +47,7 @@ const ClassesSection = () => (
           <span className="eyebrow">Clases de Spinning</span>
           <h2 className="section-title">Sesiones para cada estado de ánimo</h2>
           <p className="section-subtitle">
-            Disfruta una biblioteca curada con la vibra Bestcycling: playlists
+            Playlists
             épicas, coaching claro y bloques progresivos de trabajo.
           </p>
         </div>
@@ -168,7 +168,7 @@ const WhoAmISection = () => (
           <span className="eyebrow">Quién soy</span>
           <h2 className="section-title">Tu coach en casa</h2>
           <p className="section-subtitle">
-            Instructor de indoor cycling con años de sala y cientos de clases
+            Instructora de indoor cycling con años de sala y cientos de clases
             online impartidas. Me enfoco en que cada sesión tenga propósito.
           </p>
         </div>
@@ -189,9 +189,11 @@ const WhoAmISection = () => (
             cuidando técnica y disfrute.
           </p>
           <ul className="list">
-            <li>Certificado en ciclismo indoor y entrenamiento funcional</li>
-            <li>Especialista en planes progresivos de 4-8 semanas</li>
-            <li>Experiencia liderando clases en vivo y formatos grabados</li>
+            <li>Profesora Nacional de Educación Física</li>
+            <li>Instructora certificada de Spinning®️</li>
+            <li>Entrenadora en ciclismo de ruta y MTB</li>
+            <li>Entrenamiento funcional</li>
+            <li>Instructora de gimnasia</li>
           </ul>
         </div>
       </div>
@@ -211,7 +213,12 @@ const CTASection = () => (
           </p>
         </div>
         <div className="cta-actions">
-          <a className="btn-primary" href="#personalizadas">
+          <a 
+            className="btn-primary" 
+            href="https://wa.me/5492342465540" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             Pedir plan personalizado
           </a>
         </div>
@@ -276,7 +283,7 @@ function Home() {
       <ContactSection />
       <CTASection />
       <div className="footer">
-        <p>© 2025 Spinning App. Inspirado en la energía Bestcycling.</p>
+        <p>© 2025 Marina Beccaglia</p>
         <p>Entrena desde casa con música y coaching real.</p>
       </div>
     </div>

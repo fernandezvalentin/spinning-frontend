@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import logo from "../assets/logo.jpg";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +18,8 @@ function Navbar() {
     <nav className="navbar">
       {/* 1. LOGO */}
       <Link to="/" className="nav-logo" onClick={closeMenu}>
-        SPINNING
+        <img src={logo} alt="Spinning Logo" className="logo-img" />
+        <span>SPINNING</span>
       </Link>
 
       {/* HAMBURGER TOGGLE */}

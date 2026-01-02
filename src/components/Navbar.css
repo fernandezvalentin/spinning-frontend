@@ -14,12 +14,23 @@
 }
 
 .nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: #ff6600;
   text-decoration: none;
   font-size: 1.3rem;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+.logo-img {
+  height: 45px;
+  width: 45px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
 }
 
 .nav-links {
