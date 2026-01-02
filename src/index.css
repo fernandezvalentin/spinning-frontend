@@ -1,4 +1,5 @@
 :root {
+  scroll-behavior: smooth;
   --bg-primary: #003b4c;
   --bg-elevated: #0a1f2e;
   --card: #1a2a35;
