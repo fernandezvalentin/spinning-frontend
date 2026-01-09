@@ -45,7 +45,7 @@ const ClassesSection = () => (
       <div className="section-header">
         <div>
           <span className="eyebrow">Clases de Spinning</span>
-          <h2 className="section-title">Sesiones para cada estado de ánimo</h2>
+          <h2 className="section-title">Sesiones niveladas</h2>
           <p className="section-subtitle">
             Playlists, coaching claro y bloques progresivos de trabajo.
           </p>
