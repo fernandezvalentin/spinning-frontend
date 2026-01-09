@@ -18,8 +18,11 @@ function Navbar() {
     <nav className="navbar">
       {/* 1. LOGO */}
       <Link to="/" className="nav-logo" onClick={closeMenu}>
-        <img src={logo} alt="Spinning Logo" className="logo-img" />
-        <span>SPINNING</span>
+        <img src={logo} alt="Marina Beccaglia" className="logo-img" />
+        <div className="logo-text">
+          <span className="logo-first">Marina</span>
+          <span className="logo-last">Beccaglia</span>
+        </div>
       </Link>
 
       {/* HAMBURGER TOGGLE */}
@@ -32,13 +35,13 @@ function Navbar() {
       {/* 2. ENLACES */}
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <a href="/#clases" className="nav-link" onClick={closeMenu}>
-          CLASES
+          SPINNING
         </a>
-        <a href="/#personalizadas" className="nav-link" onClick={closeMenu}>
-          PERSONALIZADAS
+        <a href="/#funcional" className="nav-link" onClick={closeMenu}>
+          FUNCIONAL
         </a>
-        <a href="/#quien-soy" className="nav-link" onClick={closeMenu}>
-          QUIÉN SOY
+        <a href="/#sobre-mi" className="nav-link" onClick={closeMenu}>
+          SOBRE MÍ
         </a>
         <a href="/#contacto" className="nav-link" onClick={closeMenu}>
           CONTACTO

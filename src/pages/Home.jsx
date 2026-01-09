@@ -1,5 +1,6 @@
 import React from "react";
 import "./Home.css";
+import marinaProfile from "../assets/marina-profile.jpg";
 
 const HeroSection = () => (
   <section className="hero" id="inicio">
@@ -7,12 +8,11 @@ const HeroSection = () => (
       <div>
         <span className="eyebrow">Clases de Spinning Online</span>
         <h1 className="hero-title">
-          Energía, música y enfoque en tu progreso
+          Entrená inteligente, viví mejor
         </h1>
         <p className="hero-subtitle">
-          Entrena en casa con sesiones diseñadas para sentir la potencia de una
-          sala de ciclo indoor: música motivante, coaching real y métricas que
-          siguen tu ritmo.
+          Planes diseñados para que logres tu mejor versión, adaptados a tu
+          ritmo y objetivos reales.
         </p>
         <div className="hero-actions">
           <a href="#clases" className="btn-primary">
@@ -47,12 +47,11 @@ const ClassesSection = () => (
           <span className="eyebrow">Clases de Spinning</span>
           <h2 className="section-title">Sesiones para cada estado de ánimo</h2>
           <p className="section-subtitle">
-            Playlists
-            épicas, coaching claro y bloques progresivos de trabajo.
+            Playlists, coaching claro y bloques progresivos de trabajo.
           </p>
         </div>
-        <a className="btn-secondary" href="#personalizadas">
-          Ver clases personalizadas
+        <a className="btn-secondary" href="#funcional">
+          Ver entrenamiento funcional
         </a>
       </div>
 
@@ -101,58 +100,55 @@ const ClassesSection = () => (
   </section>
 );
 
-const CustomClassesSection = () => (
-  <section className="section" id="personalizadas">
+const FunctionalTrainingSection = () => (
+  <section className="section" id="funcional">
     <div className="section-inner">
       <div className="section-header">
         <div>
-          <span className="eyebrow">Clases personalizadas</span>
+          <span className="eyebrow">Entrenamiento funcional</span>
           <h2 className="section-title">Plan a medida para tus objetivos</h2>
           <p className="section-subtitle">
-            Cuéntame tu nivel, disponibilidad y equipo. Recibirás clases
-            curadas, tempos sugeridos y feedback directo.
+            Cuéntame tu nivel, disponibilidad y equipo. Recibirás rutinas
+            específicas, progresiones sugeridas y feedback directo.
           </p>
         </div>
       </div>
 
       <div className="cards-grid">
         <div className="card">
-          <span className="chip">Starter</span>
-          <h4>Base + Técnica</h4>
+          <span className="chip">Bienestar</span>
+          <h4>Movilidad + Salud</h4>
           <p>
-            Ideal si vuelves a pedalear. Ritmos controlados y foco en cadencia y
-            postura.
+            Ideal para empezar desde cero o retomar el movimiento. Foco en corregir la postura, ganar flexibilidad y técnica base.
           </p>
           <ul className="list">
-            <li>3 clases/semana</li>
-            <li>Inicios suaves + progresión</li>
-            <li>Estiramientos guiados</li>
+            <li>3 clases/semana: Rutinas guiadas paso a paso.</li>
+            <li>Foco Postural: Ejercicios para aliviar tensiones.</li>
+            <li>Guía de Inicio: Tutoriales de técnica básica.</li>
           </ul>
         </div>
         <div className="card">
-          <span className="chip">Performance</span>
-          <h4>Ritmo + Potencia</h4>
+          <span className="chip">Rendimiento</span>
+          <h4>Fuerza + Definición</h4>
           <p>
-            Para quienes buscan intensidad: intervalos, subidas largas y trabajo
-            de umbral.
+            Para quienes buscan resultados visibles y mayor intensidad. Combinamos fuerza funcional con bloques metabólicos (HIIT).
           </p>
           <ul className="list">
-            <li>4-5 clases/semana</li>
-            <li>Test de referencia mensual</li>
-            <li>Bloques HIIT y tempo</li>
+            <li>4-5 clases/semana: Planificación de alta quema.</li>
+            <li>Progresión de Cargas: Entrená con propósito.</li>
+            <li>Desafíos Mensuales: Test de nivel para medir cambios.</li>
           </ul>
         </div>
         <div className="card">
-          <span className="chip">Personal Coach</span>
-          <h4>1:1 con feedback</h4>
+          <span className="chip">Transformación</span>
+          <h4>1:1 Plan Personal</h4>
           <p>
-            Agenda una sesión individual. Ajustamos resistencias, técnica y
-            música a tu gusto.
+            Entrenamiento diseñado exclusivamente para vos. Ajustamos cada ejercicio a tus lesiones, materiales y tiempos disponibles.
           </p>
           <ul className="list">
-            <li>Sesiones por videollamada</li>
-            <li>Grabación y notas de mejora</li>
-            <li>Playlist personalizada</li>
+            <li>Seguimiento por WhatsApp: Consultas y dudas diarias.</li>
+            <li>Corrección en Video: Feedback directo de tu técnica.</li>
+            <li>Ajuste Semanal: Adaptamos el plan según tu progreso.</li>
           </ul>
         </div>
       </div>
@@ -161,14 +157,14 @@ const CustomClassesSection = () => (
 );
 
 const WhoAmISection = () => (
-  <section className="section" id="quien-soy">
+  <section className="section" id="sobre-mi">
     <div className="section-inner">
       <div className="section-header">
         <div>
-          <span className="eyebrow">Quién soy</span>
+          <span className="eyebrow">Sobre mí</span>
           <h2 className="section-title">Tu coach en casa</h2>
           <p className="section-subtitle">
-            Instructora de indoor cycling con años de sala y cientos de clases
+            Instructora con años de experiencia en sala y cientos de clases
             online impartidas. Me enfoco en que cada sesión tenga propósito.
           </p>
         </div>
@@ -177,8 +173,8 @@ const WhoAmISection = () => (
       <div className="profile">
         <div className="profile-photo">
           <img
-            src="https://www.dir.cat/blog/wp-content/uploads/2022/12/gettyimages-820404152-170667a.jpg"
-            alt="Instructor en bici"
+            src={marinaProfile}
+            alt="Marina Beccaglia"
           />
         </div>
         <div className="profile-content">
@@ -206,10 +202,10 @@ const CTASection = () => (
     <div className="section-inner">
       <div className="cta-band">
         <div>
-          <h3 style={{ margin: "0 0 8px" }}>¿Listo para pedalear?</h3>
+          <h3 style={{ margin: "0 0 8px" }}>¿Buscás un cambio real?</h3>
           <p className="cta-text">
-            Recibe un plan de inicio con tres clases guiadas y
-            recomendaciones de resistencia para tu bici.
+            Recibí un plan de entrenamiento funcional diseñado para vos, con
+            rutinas guiadas y seguimiento de tu progreso.
           </p>
         </div>
         <div className="cta-actions">
@@ -219,7 +215,7 @@ const CTASection = () => (
             target="_blank" 
             rel="noopener noreferrer"
           >
-            Pedir plan personalizado
+            Pedir mi plan funcional
           </a>
         </div>
       </div>
@@ -235,7 +231,7 @@ const ContactSection = () => (
           <span className="eyebrow">Contacto</span>
           <h2 className="section-title">¡Hablemos y empecemos a entrenar!</h2>
           <p className="section-subtitle" style={{ margin: "16px auto" }}>
-            Sígueme en redes sociales o escríbeme directamente para consultas sobre planes personalizados y clases.
+            Sígueme en redes sociales o escríbeme directamente para consultas sobre entrenamientos personalizados y clases.
           </p>
         </div>
       </div>
@@ -278,7 +274,7 @@ function Home() {
     <div className="home-container">
       <HeroSection />
       <ClassesSection />
-      <CustomClassesSection />
+      <FunctionalTrainingSection />
       <WhoAmISection />
       <ContactSection />
       <CTASection />
