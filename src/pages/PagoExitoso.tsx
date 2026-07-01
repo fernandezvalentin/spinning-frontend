@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import "./Home.css";
+import { motion } from "framer-motion";
 
 function PagoExitoso() {
+  // @ts-ignore
   const { user, refreshUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [verificando, setVerificando] = useState(true);
@@ -11,12 +12,12 @@ function PagoExitoso() {
   const intentosRef = useRef(0);
   const maxIntentos = 30;
   const redirigidoRef = useRef(false);
-  const intervalRef = useRef(null);
-  const timeoutRef = useRef(null);
+  const intervalRef = useRef<any>(null);
+  const timeoutRef = useRef<any>(null);
   const iniciadoRef = useRef(false);
 
-  // Efecto para escuchar cambios en el usuario del contexto
   useEffect(() => {
+    // @ts-ignore
     if (user && user.pago_activo && !redirigidoRef.current) {
       redirigidoRef.current = true;
       setVerificando(false);
@@ -38,18 +39,17 @@ function PagoExitoso() {
   }, [user, navigate]);
 
   useEffect(() => {
-    // Verificación inicial
     if (!user) {
       navigate("/login");
       return;
     }
 
+    // @ts-ignore
     if (user.pago_activo) {
       navigate("/clases", { state: { fromPayment: true } });
       return;
     }
 
-    // Solo iniciar la verificación una vez
     if (iniciadoRef.current) {
       return;
     }
@@ -58,7 +58,6 @@ function PagoExitoso() {
     const verificarPago = async () => {
       if (redirigidoRef.current) return;
 
-      // Si ya alcanzamos el máximo de intentos
       if (intentosRef.current >= maxIntentos) {
         redirigidoRef.current = true;
         setVerificando(false);
@@ -79,17 +78,14 @@ function PagoExitoso() {
         return;
       }
 
-      // Actualizar mensaje según el intento
       intentosRef.current += 1;
       if (intentosRef.current > 0) {
         setMensaje(`Verificando... (${intentosRef.current}/${maxIntentos})`);
       }
 
-      // Intentar refrescar los datos del usuario
       try {
-        const updatedUser = await refreshUser();
+        const updatedUser: any = await refreshUser();
         
-        // Verificar si ahora tiene pago activo DESPUÉS del refresh
         if (updatedUser && updatedUser.pago_activo) {
           redirigidoRef.current = true;
           setVerificando(false);
@@ -114,11 +110,8 @@ function PagoExitoso() {
       }
     };
 
-    // Esperar 2 segundos antes del primer intento (dar tiempo al webhook)
     timeoutRef.current = setTimeout(() => {
       verificarPago();
-      
-      // Configurar intervalo para verificar periódicamente cada 2 segundos
       intervalRef.current = setInterval(() => {
         verificarPago();
       }, 2000);
@@ -138,7 +131,7 @@ function PagoExitoso() {
 
   const handleVerificarManual = async () => {
     try {
-      const updatedUser = await refreshUser();
+      const updatedUser: any = await refreshUser();
       if (updatedUser && updatedUser.pago_activo) {
         navigate("/clases", { state: { fromPayment: true } });
       } else {
@@ -151,32 +144,44 @@ function PagoExitoso() {
   };
 
   return (
-    <div className="home-container">
-      <div className="info-card" style={{ marginTop: "80px" }}>
-        <h2>✅ ¡Pago Exitoso!</h2>
-        <p style={{ fontSize: "1.1rem", marginBottom: "20px" }}>
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-bg-elevated border border-border p-8 rounded-2xl max-w-lg w-full text-center shadow-2xl"
+      >
+        <div className="w-20 h-20 mx-auto bg-green-500/20 rounded-full flex items-center justify-center mb-6">
+          <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h2 className="text-3xl font-bold text-white mb-4">¡Pago Exitoso!</h2>
+        <p className="text-lg text-text-muted mb-8">
           {mensaje}
         </p>
+
         {verificando && (
-          <div style={{ marginTop: "20px" }}>
-            <p style={{ color: "var(--text-muted)", marginBottom: "10px" }}>
+          <div className="mt-4">
+            <div className="flex justify-center mb-6">
+              <div className="w-8 h-8 border-4 border-bg-primary border-t-accent rounded-full animate-spin"></div>
+            </div>
+            <p className="text-text-muted text-sm mb-2">
               Por favor espera un momento mientras procesamos tu pago y activamos tu acceso.
             </p>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginBottom: "20px" }}>
+            <p className="text-text-muted/70 text-xs mb-6">
               Esto puede tomar unos segundos...
             </p>
             {intentosRef.current > 5 && (
               <button 
                 onClick={handleVerificarManual}
-                className="btn-primary"
-                style={{ marginTop: "10px" }}
+                className="bg-accent hover:bg-accent-strong text-white px-6 py-2.5 rounded-full font-medium transition-colors w-full"
               >
                 Verificar ahora
               </button>
             )}
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,48 +1,29 @@
-:root {
-  scroll-behavior: smooth;
-  --bg-primary: #003b4c;
-  --bg-elevated: #0a1f2e;
-  --card: #1a2a35;
-  --card-contrast: #f6f8ff;
-  --text-main: #ffffff;
-  --text-muted: #b8c5d0;
-  --accent: #ff6600;
-  --accent-strong: #e65c00;
-  --accent-warm: #ff7b50;
-  --border: rgba(255, 255, 255, 0.1);
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #003b4c;
+  --color-bg-elevated: #0a1f2e;
+  --color-card: #1a2a35;
+  --color-card-contrast: #f6f8ff;
+  --color-text-main: #ffffff;
+  --color-text-muted: #b8c5d0;
+  --color-accent: #ff6600;
+  --color-accent-strong: #e65c00;
+  --color-accent-warm: #ff7b50;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --font-sans: "Montserrat", system-ui, -apple-system, sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg-primary text-text-main font-sans antialiased;
+    background: radial-gradient(circle at 10% 20%, #0a1f2e 0%, #003b4c 45%),
+      radial-gradient(circle at 80% 0%, #0f294d 0%, #003b4c 40%),
+      #003b4c;
+    margin: 0;
+    min-height: 100vh;
+  }
 }
-
-body {
-  margin: 0;
-  font-family: "Montserrat", system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 10% 20%, #0a1f2e 0%, #003b4c 45%),
-    radial-gradient(circle at 80% 0%, #0f294d 0%, #003b4c 40%),
-    #003b4c;
-  color: var(--text-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-a {
-  color: inherit;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-button {
-  font-family: inherit;
-}
-
-section {
-  width: 100%;
-}
-
