@@ -1,23 +1,24 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/auth-context";
 import { getClases } from "../services/api";
+import type { Clase } from "../types";
+import { vimeoUrl } from "../utils/vimeo";
 import ReactPlayer from "react-player";
 import { motion } from "framer-motion";
 
 function Clases() {
-  // @ts-ignore
-  const { user, refreshUser } = useContext(AuthContext);
-  const [clases, setClases] = useState<any[]>([]);
+  const { user, refreshUser } = useAuth();
+  const [clases, setClases] = useState<Clase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [verificandoPago, setVerificandoPago] = useState(false);
   const location = useLocation();
+  const fromPayment = (location.state as { fromPayment?: boolean } | null)?.fromPayment;
 
   useEffect(() => {
     const verificarPagoSiEsNecesario = async () => {
-      // @ts-ignore
-      if (!user?.pago_activo && location.state?.fromPayment) {
+      if (!user?.pago_activo && fromPayment) {
         setVerificandoPago(true);
         try {
           await refreshUser();
@@ -30,7 +31,7 @@ function Clases() {
       }
     };
     verificarPagoSiEsNecesario();
-  }, [user, refreshUser, location.state]);
+  }, [user, refreshUser, fromPayment]);
 
   useEffect(() => {
     const cargarClases = async () => {
@@ -38,8 +39,8 @@ function Clases() {
       try {
         const data = await getClases(user.token);
         setClases(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error desconocido");
       } finally {
         setLoading(false);
       }
@@ -105,7 +106,7 @@ function Clases() {
         className="mb-12 border-b border-border pb-8"
       >
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-          ¡Bienvenido a tus Clases, <span className="text-accent-warm">{user.email.split('@')[0]}</span>!
+          ¡Bienvenido a tus Clases, <span className="text-accent-warm">{user?.email.split('@')[0]}</span>!
         </h1>
         <p className="text-text-muted text-lg">Tu suscripción está activa. ¡Es hora de pedalear!</p>
       </motion.div>
@@ -121,7 +122,7 @@ function Clases() {
           >
             <div className="relative pt-[56.25%] bg-black">
               <ReactPlayer
-                url={`https://vimeo.com/${clase.link_vimeo}`}
+                src={vimeoUrl(clase.link_vimeo)}
                 controls={true}
                 width="100%"
                 height="100%"

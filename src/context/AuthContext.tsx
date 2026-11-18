@@ -1,60 +1,69 @@
-import React, { createContext, useState, useEffect } from "react"; // <-- ¡EL ARREGLO!
-import { loginUsuario, registerUsuario, getPerfilUsuario } from "../services/api";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { getPerfilUsuario, loginUsuario, registerUsuario } from "../services/api";
+import type { Usuario } from "../types";
+import { AuthContext } from "./auth-context";
 
-export const AuthContext = createContext();
+const STORAGE_KEY = "user";
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+function leerUsuarioGuardado(): Usuario | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Usuario) : null;
+  } catch {
+    return null;
+  }
+}
 
-  const login = async (email, password) => {
-    try {
+function guardarUsuario(user: Usuario | null) {
+  try {
+    if (user) localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    else localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // localStorage puede no estar disponible (modo privado, etc.)
+  }
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<Usuario | null>(leerUsuarioGuardado);
+
+  const actualizar = useCallback((next: Usuario | null) => {
+    setUser(next);
+    guardarUsuario(next);
+  }, []);
+
+  const login = useCallback(
+    async (email: string, password: string) => {
       const data = await loginUsuario(email, password);
-      setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
+      actualizar(data);
       return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const register = async (email, password) => {
-    try {
-      const data = await registerUsuario(email, password);
-      setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const refreshUser = async () => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      if (storedUser && storedUser.token) {
-        const data = await getPerfilUsuario(storedUser.token);
-        // Mantener el token del usuario almacenado
-        const updatedUser = { ...data, token: storedUser.token };
-        setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        return updatedUser;
-      }
-    } catch (error) {
-      console.error("Error al refrescar usuario:", error);
-      throw error;
-    }
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login, register, logout, refreshUser }}>
-      {children}
-    </AuthContext.Provider>
+    },
+    [actualizar]
   );
-};
+
+  const register = useCallback(
+    async (email: string, password: string) => {
+      const data = await registerUsuario(email, password);
+      actualizar(data);
+      return data;
+    },
+    [actualizar]
+  );
+
+  const refreshUser = useCallback(async () => {
+    const stored = leerUsuarioGuardado();
+    if (!stored?.token) return null;
+    const perfil = await getPerfilUsuario(stored.token);
+    const updated: Usuario = { ...perfil, token: stored.token };
+    actualizar(updated);
+    return updated;
+  }, [actualizar]);
+
+  const logout = useCallback(() => actualizar(null), [actualizar]);
+
+  const value = useMemo(
+    () => ({ user, login, register, logout, refreshUser }),
+    [user, login, register, logout, refreshUser]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}

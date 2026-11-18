@@ -1,5 +1,5 @@
-import React, { useState, useContext, FormEvent } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, type FormEvent } from "react";
+import { useAuth } from "../context/auth-context";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -9,8 +9,7 @@ function Register() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // @ts-ignore
-  const { register } = useContext(AuthContext);
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -21,8 +20,8 @@ function Register() {
     try {
       await register(email, password);
       navigate("/");
-    } catch (err: any) {
-      setError(`Error: ${err.message}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Ocurrió un error inesperado");
     } finally {
       setLoading(false);
     }
@@ -49,8 +48,10 @@ function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-text-muted mb-1">Email</label>
             <input
+              id="email"
+              autoComplete="email"
               type="email"
               className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 text-white placeholder-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-transparent transition-all"
               value={email}
@@ -61,13 +62,16 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-1">Contraseña</label>
+            <label htmlFor="password" className="block text-sm font-medium text-text-muted mb-1">Contraseña</label>
             <input
+              id="password"
+              autoComplete="new-password"
               type="password"
               className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 text-white placeholder-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-transparent transition-all"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Mínimo 6 caracteres"
+              minLength={6}
               required
             />
           </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import marinaProfile from "../assets/marina-profile.jpg";
 
@@ -186,7 +185,10 @@ const WhoAmISection = () => (
       >
         <img
           src={marinaProfile}
-          alt="Marina Beccaglia"
+          alt="Marina Beccaglia, instructora de spinning"
+          width={1024}
+          height={490}
+          loading="lazy"
           className="w-full h-auto object-cover"
         />
       </motion.div>
@@ -316,7 +318,7 @@ function Home() {
       <CTASection />
       
       <div className="py-12 text-center text-text-muted border-t border-border mt-10">
-        <p className="font-semibold text-white/80 mb-2">© 2025 Marina Beccaglia</p>
+        <p className="font-semibold text-white/80 mb-2">© {new Date().getFullYear()} Marina Beccaglia</p>
         <p className="text-sm">Entrená desde casa con música y coaching real.</p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logo.jpg";
@@ -20,7 +20,7 @@ function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* 1. LOGO */}
           <Link to="/" className="flex items-center gap-3" onClick={closeMenu}>
-            <img src={logo} alt="Marina Beccaglia" className="w-10 h-10 rounded-full object-cover border border-white/20" />
+            <img src={logo} alt="Marina Beccaglia" width={40} height={40} className="w-10 h-10 rounded-full object-cover border border-white/20" />
             <div className="flex flex-col uppercase tracking-wider font-bold">
               <span className="text-white text-sm leading-none">Marina</span>
               <span className="text-accent-warm text-sm leading-none">Beccaglia</span>
@@ -29,8 +29,10 @@ function Navbar() {
 
           {/* HAMBURGER TOGGLE (Mobile) */}
           <button 
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none" 
+            className="md:hidden flex flex-col justify-center items-center w-8 h-8 focus:outline-none"
             onClick={toggleMenu}
+            aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isOpen}
           >
             <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${isOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'}`}></span>
             <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>

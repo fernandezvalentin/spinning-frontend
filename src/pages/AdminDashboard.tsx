@@ -1,16 +1,16 @@
-import React, { useContext, useState, useEffect, FormEvent } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect, type FormEvent } from "react";
+import { useAuth } from "../context/auth-context";
+import type { Clase } from "../types";
 import { addClase, getClases, deleteClase, updateClase } from "../services/api";
 import { motion } from "framer-motion";
 
 function AdminDashboard() {
-  // @ts-ignore
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [linkVimeo, setLinkVimeo] = useState("");
-  const [clases, setClases] = useState<any[]>([]);
+  const [clases, setClases] = useState<Clase[]>([]);
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -22,8 +22,8 @@ function AdminDashboard() {
       try {
         const data = await getClases(user.token);
         setClases(data);
-      } catch (error: any) {
-        setMensaje(`Error al cargar clases: ${error.message}`);
+      } catch (error) {
+        setMensaje(`Error al cargar clases: ${error instanceof Error ? error.message : "desconocido"}`);
       } finally {
         setLoading(false);
       }
@@ -33,6 +33,7 @@ function AdminDashboard() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     setLoading(true);
     setMensaje("");
 
@@ -49,14 +50,15 @@ function AdminDashboard() {
         setClases([...clases, nuevaClase]);
       }
       limpiarFormulario();
-    } catch (error: any) {
-      setMensaje(`Error: ${error.message}`);
+    } catch (error) {
+      setMensaje(`Error: ${error instanceof Error ? error.message : "desconocido"}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (idDeLaClase: string) => {
+    if (!user) return;
     if (!window.confirm("¿Estás seguro de que querés borrar esta clase?")) {
       return;
     }
@@ -66,17 +68,17 @@ function AdminDashboard() {
       await deleteClase(user.token, idDeLaClase);
       setMensaje("¡Clase borrada con éxito!");
       setClases((clasesActuales) => clasesActuales.filter((clase) => clase._id !== idDeLaClase));
-    } catch (error: any) {
-      setMensaje(`Error al borrar: ${error.message}`);
+    } catch (error) {
+      setMensaje(`Error al borrar: ${error instanceof Error ? error.message : "desconocido"}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEditar = (clase: any) => {
+  const handleEditar = (clase: Clase) => {
     setEditandoId(clase._id);
     setTitulo(clase.titulo);
-    setDescripcion(clase.descripcion);
+    setDescripcion(clase.descripcion ?? "");
     setLinkVimeo(clase.link_vimeo);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

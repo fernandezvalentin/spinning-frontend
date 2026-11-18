@@ -1,5 +1,5 @@
-import React, { useState, useContext, FormEvent } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, type FormEvent } from "react";
+import { useAuth } from "../context/auth-context";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -9,8 +9,7 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // @ts-ignore (Assuming context will be typed later)
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -21,8 +20,8 @@ function Login() {
     try {
       await login(email, password);
       navigate("/");
-    } catch (err: any) {
-      setError(`Error: ${err.message}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Ocurrió un error inesperado");
     } finally {
       setLoading(false);
     }
@@ -49,8 +48,10 @@ function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-text-muted mb-1">Email</label>
             <input
+              id="email"
+              autoComplete="email"
               type="email"
               className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 text-white placeholder-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-transparent transition-all"
               value={email}
@@ -61,8 +62,10 @@ function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-muted mb-1">Contraseña</label>
+            <label htmlFor="password" className="block text-sm font-medium text-text-muted mb-1">Contraseña</label>
             <input
+              id="password"
+              autoComplete="current-password"
               type="password"
               className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 text-white placeholder-text-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-transparent transition-all"
               value={password}

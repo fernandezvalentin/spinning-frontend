@@ -1,30 +1,28 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/auth-context";
 import { motion } from "framer-motion";
 
 function PagoExitoso() {
-  // @ts-ignore
-  const { user, refreshUser } = useContext(AuthContext);
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [verificando, setVerificando] = useState(true);
   const [mensaje, setMensaje] = useState("Verificando tu suscripción...");
   const intentosRef = useRef(0);
   const maxIntentos = 30;
   const redirigidoRef = useRef(false);
-  const intervalRef = useRef<any>(null);
-  const timeoutRef = useRef<any>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const iniciadoRef = useRef(false);
 
   useEffect(() => {
-    // @ts-ignore
     if (user && user.pago_activo && !redirigidoRef.current) {
       redirigidoRef.current = true;
       setVerificando(false);
       setMensaje("¡Suscripción activada! Redirigiendo a tus clases...");
       
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current as ReturnType<typeof setInterval>);
         intervalRef.current = null;
       }
       if (timeoutRef.current) {
@@ -44,7 +42,6 @@ function PagoExitoso() {
       return;
     }
 
-    // @ts-ignore
     if (user.pago_activo) {
       navigate("/clases", { state: { fromPayment: true } });
       return;
@@ -64,7 +61,7 @@ function PagoExitoso() {
         setMensaje("El pago se procesó correctamente. Redirigiendo...");
         
         if (intervalRef.current) {
-          clearInterval(intervalRef.current);
+          clearInterval(intervalRef.current as ReturnType<typeof setInterval>);
           intervalRef.current = null;
         }
         if (timeoutRef.current) {
@@ -84,7 +81,7 @@ function PagoExitoso() {
       }
 
       try {
-        const updatedUser: any = await refreshUser();
+        const updatedUser = await refreshUser();
         
         if (updatedUser && updatedUser.pago_activo) {
           redirigidoRef.current = true;
@@ -92,7 +89,7 @@ function PagoExitoso() {
           setMensaje("¡Suscripción activada! Redirigiendo a tus clases...");
           
           if (intervalRef.current) {
-            clearInterval(intervalRef.current);
+            clearInterval(intervalRef.current as ReturnType<typeof setInterval>);
             intervalRef.current = null;
           }
           if (timeoutRef.current) {
@@ -119,7 +116,7 @@ function PagoExitoso() {
 
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current as ReturnType<typeof setInterval>);
         intervalRef.current = null;
       }
       if (timeoutRef.current) {
@@ -131,7 +128,7 @@ function PagoExitoso() {
 
   const handleVerificarManual = async () => {
     try {
-      const updatedUser: any = await refreshUser();
+      const updatedUser = await refreshUser();
       if (updatedUser && updatedUser.pago_activo) {
         navigate("/clases", { state: { fromPayment: true } });
       } else {

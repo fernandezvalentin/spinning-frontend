@@ -1,41 +1,91 @@
-# Spinning Showcase - Marina Beccaglia 🚴‍♀️✨
+# Marina Beccaglia · Spinning & Entrenamiento Funcional 🚴‍♀️
 
-Este proyecto es una landing page profesional diseñada para **Marina Beccaglia**, Instructora Certificada de Spinning®️ y Profesora Nacional de Educación Física. El sitio funciona como un escaparate para mostrar sus servicios, clases, y provee el punto de acceso (link) para que cada usuario pueda loguearse a su portal externo de clases de spinning.
+[![CI](https://github.com/fernandezvalentin/spinning-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/fernandezvalentin/spinning-frontend/actions/workflows/ci.yml)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
 
-## 🚀 Características Principales
+**🔗 Demo en vivo: [spinning-frontend.vercel.app](https://spinning-frontend.vercel.app)**
 
-- **Diseño Premium y Dinámico**: Interfaz moderna con estética de alto impacto, modo oscuro, efectos de *glassmorphism* y micro-animaciones fluidas con Framer Motion.
-- **Responsive Design**: Completamente diseñado bajo un enfoque *Mobile-First*, optimizado para verse increíble en cualquier dispositivo, con menú hamburguesa animado.
-- **Navegación Fluida**: Implementación de *smooth scrolling* para una mejor experiencia de usuario al navegar por las secciones.
-- **Integración de Redes**: Enlaces directos y visuales a Instagram y WhatsApp para consultas inmediatas.
-- **Portal de Acceso**: Punto de entrada centralizado desde donde los alumnos son redirigidos a la plataforma externa para iniciar sesión y ver sus clases.
+Sitio web real para **Marina Beccaglia**, instructora certificada de Spinning® y Profesora Nacional de Educación Física. Presenta sus clases de spinning online y sus planes de entrenamiento funcional, y lleva a los alumnos a contactarla o a su plataforma de clases.
 
-## 🛠️ Tecnologías Utilizadas
+<p align="center">
+  <img src="docs/preview.jpg" alt="Vista de escritorio" width="72%" />
+  &nbsp;
+  <img src="docs/preview-mobile.jpg" alt="Vista mobile" width="22%" />
+</p>
 
-- **React 19 & TypeScript**: Desarrollo robusto y tipado estricto para la interfaz.
-- **Vite**: Herramienta de construcción y empaquetado ultra rápida.
-- **Tailwind CSS (v4)**: Motor principal de estilos utilitarios modernos.
-- **Framer Motion**: Librería para orquestar animaciones, transiciones de montaje y efectos de scroll.
-- **React Router 7**: Gestión avanzada de navegación en la aplicación.
+## ✨ Funcionalidades
 
-## 📦 Instalación y Desarrollo Local
+**Landing pública**
+- Diseño *mobile-first* con menú hamburguesa animado y accesible.
+- Animaciones al hacer scroll con Framer Motion.
+- Secciones de clases, planes funcionales, perfil y contacto (WhatsApp e Instagram).
+- SEO básico: `title` y `description`, Open Graph, favicon e idioma `es`.
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/fernandezvalentin/spinning-frontend.git
-   ```
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-3. Inicia el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
-4. Para compilar para producción:
-   ```bash
-   npm run build
-   ```
+**Área de alumnos y panel de administración** (requiere el backend)
+- Registro e inicio de sesión con JWT, con la sesión guardada en el navegador.
+- Rutas protegidas para alumnos (`/clases`) y para administradores (`/admin`).
+- Pago de la suscripción con checkout externo. La pantalla `/pago-exitoso` consulta al backend hasta confirmar que el pago se acreditó.
+- Clases en video desde Vimeo. Se acepta tanto el ID como el link completo.
+- CRUD de clases para la administradora.
+
+## 🧱 Stack y decisiones técnicas
+
+| Área | Elección | Por qué |
+|---|---|---|
+| UI | React 19 + TypeScript (`strict`) | Tipado de punta a punta: modelos (`src/types.ts`), API y contexto |
+| Build | Vite 7 | Arranque instantáneo en desarrollo y build optimizado |
+| Estilos | Tailwind CSS 4 con tokens en `@theme` | Paleta y tipografía centralizadas en `index.css` |
+| Routing | React Router 7 (data router) | Rutas anidadas con *guards* de autenticación y de rol |
+| Estado de sesión | Context API + hook `useAuth()` | Simple y suficiente para este alcance, sin librerías extra |
+| HTTP | Axios con un helper `request<T>()` | Un solo lugar para normalizar los errores del backend |
+| Performance | *Code splitting* con `React.lazy` | La landing no descarga el reproductor de video ni el panel de admin |
+| Deploy | Vercel + `vercel.json` | Rewrites para que funcionen las URLs de la SPA al recargar |
+| Calidad | ESLint + `tsc` + GitHub Actions | Cada push y cada PR corren lint, chequeo de tipos y build |
+
+## 📁 Estructura
+
+```
+src/
+├── components/   # Layout, Navbar y guards de rutas (RutaProtegida, AdminRutaProtegida)
+├── context/      # AuthProvider + hook useAuth()
+├── pages/        # Home, Login, Register, Clases, PagoExitoso, AdminDashboard, NotFound
+├── services/     # Cliente HTTP tipado (api.ts)
+├── utils/        # Helpers (normalización de links de Vimeo)
+└── types.ts      # Modelos compartidos: Usuario, Clase
+```
+
+## 🚀 Correrlo en local
+
+```bash
+git clone https://github.com/fernandezvalentin/spinning-frontend.git
+cd spinning-frontend
+npm install
+cp .env.example .env   # opcional: URL del backend
+npm run dev
+```
+
+| Script | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Chequeo de tipos y build de producción |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Solo TypeScript |
+| `npm run preview` | Sirve el build localmente |
+
+### Variables de entorno
+
+| Variable | Default | Descripción |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:5001/api` | URL base del backend REST |
+
+## 🗺️ Próximos pasos
+
+- [ ] Publicar el backend y conectar el área de alumnos en producción
+- [ ] Tests de componentes con Vitest y Testing Library
+- [ ] Imágenes en formato WebP/AVIF y `og:image` para compartir en redes
 
 ---
-© 2025 Marina Beccaglia - Entrená inteligente, viví mejor.
+
+Desarrollado por **[Valentín Fernández](https://github.com/fernandezvalentin)**.

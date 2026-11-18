@@ -1,161 +1,57 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import type { Clase, DatosClase, Usuario } from "../types";
 
-// 1. Definimos la URL base de tu backend
-const API_URL = "http://localhost:5001/api";
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5001/api";
 
-// 2. Creamos una "instancia" de axios
-const api = axios.create({
-  baseURL: API_URL,
+const api = axios.create({ baseURL: API_URL });
+
+const authHeader = (token: string) => ({
+  headers: { Authorization: `Bearer ${token}` },
 });
 
-// 3. Función de Login
-export const loginUsuario = async (email, password) => {
+/**
+ * Ejecuta una request y normaliza los errores a `Error` con un mensaje legible,
+ * así los componentes solo tienen que mostrar `error.message`.
+ */
+async function request<T>(fn: () => Promise<{ data: T }>): Promise<T> {
   try {
-    const response = await api.post("/usuarios/login", { email, password });
-    return response.data;
+    const { data } = await fn();
+    return data;
   } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error(
-        "No se pudo conectar al servidor. ¿El backend está corriendo?"
-      );
+    if (isAxiosError(error) && error.response) {
+      const message =
+        (error.response.data as { message?: string })?.message ??
+        `Error ${error.response.status}`;
+      throw new Error(message);
     }
+    throw new Error("No se pudo conectar al servidor. Intentá de nuevo más tarde.");
   }
-};
+}
 
-// 4. Función de Registro
-export const registerUsuario = async (email, password) => {
-  try {
-    const response = await api.post("/usuarios/registrar", { email, password });
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const loginUsuario = (email: string, password: string) =>
+  request<Usuario>(() => api.post("/usuarios/login", { email, password }));
 
-// 5. Función para crear el link de pago
-export const crearLinkDePago = async (token) => {
-  try {
-    const response = await api.post(
-      "/pagos/crear-checkout",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const registerUsuario = (email: string, password: string) =>
+  request<Usuario>(() => api.post("/usuarios/registrar", { email, password }));
 
-// 5.5. Función para obtener el perfil del usuario
-export const getPerfilUsuario = async (token) => {
-  try {
-    const response = await api.get("/usuarios/perfil", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const getPerfilUsuario = (token: string) =>
+  request<Omit<Usuario, "token">>(() => api.get("/usuarios/perfil", authHeader(token)));
 
-// 6. Función para OBTENER las clases
-export const getClases = async (token) => {
-  try {
-    const response = await api.get("/clases", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const crearLinkDePago = (token: string) =>
+  request<{ init_point?: string; url?: string }>(() =>
+    api.post("/pagos/crear-checkout", {}, authHeader(token))
+  );
 
-// 7. Función para AÑADIR una clase nueva
-export const addClase = async (token, datosDeLaClase) => {
-  try {
-    const response = await api.post("/clases", datosDeLaClase, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const getClases = (token: string) =>
+  request<Clase[]>(() => api.get("/clases", authHeader(token)));
 
-// 8. Función para BORRAR una clase
-export const deleteClase = async (token, idDeLaClase) => {
-  try {
-    const response = await api.delete(
-      `/clases/${idDeLaClase}`, // Llama a DELETE /api/clases/:id
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Necesita el token de admin
-        },
-      }
-    );
-    return response.data; // Devuelve el mensaje de éxito
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const addClase = (token: string, datos: DatosClase) =>
+  request<Clase>(() => api.post("/clases", datos, authHeader(token)));
 
-// 9. Función para ACTUALIZAR una clase
-export const updateClase = async (token, idDeLaClase, datosNuevos) => {
-  try {
-    const response = await api.put(
-      `/clases/${idDeLaClase}`, // Llama a PUT /api/clases/:id
-      datosNuevos, // El "body" con { titulo, descripcion, link_vimeo }
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Necesita el token de admin
-        },
-      }
-    );
-    return response.data; // Devuelve la clase actualizada
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data;
-    } else {
-      throw new Error("No se pudo conectar al servidor.");
-    }
-  }
-};
+export const updateClase = (token: string, id: string, datos: DatosClase) =>
+  request<Clase>(() => api.put(`/clases/${id}`, datos, authHeader(token)));
 
-// Exportamos la 'api' (el teléfono) por si la necesitamos en otro lado
+export const deleteClase = (token: string, id: string) =>
+  request<{ message: string }>(() => api.delete(`/clases/${id}`, authHeader(token)));
+
 export default api;
