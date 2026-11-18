@@ -21,7 +21,8 @@ Sitio web real para **Marina Beccaglia**, instructora certificada de Spinning® 
 - Diseño *mobile-first* con menú hamburguesa animado y accesible.
 - Animaciones al hacer scroll con Framer Motion.
 - Secciones de clases, planes funcionales, perfil y contacto (WhatsApp e Instagram).
-- SEO básico: `title` y `description`, Open Graph, favicon e idioma `es`.
+- Botón flotante de WhatsApp y mensajes precargados según el botón, para que la instructora sepa qué plan le consultan.
+- SEO básico: `title` y `description`, favicon, idioma `es` e imagen Open Graph para compartir en WhatsApp y redes.
 
 **Área de alumnos y panel de administración** (requiere el backend)
 - Registro e inicio de sesión con JWT, con la sesión guardada en el navegador.
@@ -48,7 +49,8 @@ Sitio web real para **Marina Beccaglia**, instructora certificada de Spinning® 
 
 ```
 src/
-├── components/   # Layout, Navbar y guards de rutas (RutaProtegida, AdminRutaProtegida)
+├── components/   # Layout, Navbar, botón de WhatsApp y guards de rutas
+├── config/       # Datos de contacto y mensajes precargados
 ├── context/      # AuthProvider + hook useAuth()
 ├── pages/        # Home, Login, Register, Clases, PagoExitoso, AdminDashboard, NotFound
 ├── services/     # Cliente HTTP tipado (api.ts)
@@ -84,7 +86,8 @@ npm run dev
 
 - [ ] Publicar el backend y conectar el área de alumnos en producción
 - [ ] Tests de componentes con Vitest y Testing Library
-- [ ] Imágenes en formato WebP/AVIF y `og:image` para compartir en redes
+- [x] Imagen Open Graph para compartir en redes
+- [ ] Imágenes en formato WebP/AVIF
 
 ---
 
